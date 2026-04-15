@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject turretSpotPrefab;
     [SerializeField] private GameObject turretSet;
     private TurretSpot previousTurretSpot;
+    private Camera mainCamera;
 
     void SpawnTurretFields() {
         // Generate the top and bottom border turret spots
@@ -41,5 +42,52 @@ public class GameManager : MonoBehaviour
 
     void Start() {
         SpawnTurretFields();
+        mainCamera = Camera.main;
+    }
+
+    void StopHoveringOverTurret() {
+        if (previousTurretSpot != null) {
+            previousTurretSpot.EndHoverOver();
+            previousTurretSpot = null;
+        }
+    }
+
+    void HandleMouseOver() {
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        
+        // Cast a ray from the mouse
+        RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(mousePosition), Vector2.zero);
+        
+        // Return if it didn't hit anything
+        if (hit.collider == null) {
+            StopHoveringOverTurret();
+            return;
+        }
+        
+        // Check whether the hit object was a turret
+        TurretSpot turret = hit.collider.gameObject.GetComponent<TurretSpot>();
+
+        // Return if the mouse is still over the same turret spot
+        if (previousTurretSpot == turret) {
+            return;
+        }
+
+        // Stop hovering over the previous turret, if any
+        StopHoveringOverTurret();
+        
+        // Return if the mouse isn't hovering over a turret
+        if (turret == null) {
+            return;
+        }
+        
+        // Hover over the selected turret
+        turret.HoverOver();
+        
+        // Store the selected turret
+        previousTurretSpot = turret;
+    }
+
+    void Update() {
+        HandleMouseOver();
     }
 }
