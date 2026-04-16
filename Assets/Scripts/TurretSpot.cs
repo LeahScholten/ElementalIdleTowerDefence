@@ -5,7 +5,7 @@ public class TurretSpot : MonoBehaviour {
     SpriteRenderer spriteRenderer;
     Color color;
 
-    void Start() {
+    void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         color = spriteRenderer.color;
     }

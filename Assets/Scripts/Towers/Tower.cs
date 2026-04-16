@@ -4,6 +4,8 @@ using UnityEngine;
 public class Tower : MonoBehaviour {
     protected float range = 2;
     [SerializeField] protected float reloadTime = 2;
+    [SerializeField] protected int value = 1;
+    [SerializeField] private GameObject turretSpotPrefab;
     bool canShoot = true;
     
     Monster FindnearestMonster() {
@@ -41,16 +43,13 @@ public class Tower : MonoBehaviour {
         }
         
         if (monster == null) {
-            Debug.Log("No monster found");
             return;
         }
         
         if ((monster.transform.position - transform.position).sqrMagnitude > range) {
-            Debug.Log($"{monster.name} out of range");
             return;
         }
         
-        Debug.Log(monster.name);
         monster.GetAttacked(this);
         canShoot = false;
         Invoke(nameof(Reload), reloadTime);
@@ -60,5 +59,10 @@ public class Tower : MonoBehaviour {
     void Update() {
         Monster nearestMonster = FindnearestMonster();
         ShootAtMonster(nearestMonster);
+    }
+
+    public void Sell() {
+        Instantiate(turretSpotPrefab, transform.position, transform.rotation, transform.parent);
+        Destroy(gameObject);
     }
 }
