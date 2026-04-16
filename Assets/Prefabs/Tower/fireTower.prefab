@@ -80,7 +80,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7125807212163552307, guid: 504b5e717f237bb4f8eaaf97e1677f2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -104,3 +104,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfb473493777440dbbe341ba3f29e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tower
+  reloadTime: 3

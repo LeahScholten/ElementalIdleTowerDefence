@@ -26,4 +26,8 @@ public class Monster : MonoBehaviour
             pointIndex = (pointIndex + 1) % trackPoints.Length;
         }
     }
+
+    public virtual void GetAttacked(Tower tower) {
+        Destroy(gameObject);
+    }
 }

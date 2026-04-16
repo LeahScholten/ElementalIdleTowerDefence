@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour {
     protected float range = 2;
+    [SerializeField] protected float reloadTime = 2;
+    bool canShoot = true;
     
     Monster FindnearestMonster() {
         Monster[] monsters = FindObjectsByType<Monster>(FindObjectsSortMode.None);
@@ -14,11 +16,12 @@ public class Tower : MonoBehaviour {
         float closestDistance = float.MaxValue;
 
         foreach (Monster monster in monsters) {
+            float distance = (monster.transform.position - transform.position).sqrMagnitude;
             if(closestMonster == null) {
                 closestMonster = monster;
+                closestDistance = distance;
                 continue;
             }
-            float distance = (monster.transform.position - transform.position).sqrMagnitude;
             if (distance < closestDistance) {
                 closestDistance = distance;
                 closestMonster = monster;
@@ -28,15 +31,29 @@ public class Tower : MonoBehaviour {
         return closestMonster;
     }
 
+    void Reload() {
+        canShoot = true;
+    }
+
     void ShootAtMonster(Monster monster) {
+        if (!canShoot) {
+            return;
+        }
+        
         if (monster == null) {
-            Debug.LogWarning("No monster found");
-        }else if ((monster.transform.position - transform.position).sqrMagnitude > range) {
-            Debug.Log("Monster out of range");
+            Debug.Log("No monster found");
+            return;
         }
-        else {
-            Debug.Log(monster.name);
+        
+        if ((monster.transform.position - transform.position).sqrMagnitude > range) {
+            Debug.Log($"{monster.name} out of range");
+            return;
         }
+        
+        Debug.Log(monster.name);
+        monster.GetAttacked(this);
+        canShoot = false;
+        Invoke(nameof(Reload), reloadTime);
     }
     
     // Update is called once per frame
