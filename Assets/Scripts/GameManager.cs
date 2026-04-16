@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -89,5 +90,17 @@ public class GameManager : MonoBehaviour
 
     void Update() {
         HandleMouseOver();
+    }
+
+    public void QuitGame() {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.ExitPlaymode();
+        #else
+        Application.Quit();
+        #endif
+    }
+
+    public void ResetProgress() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
