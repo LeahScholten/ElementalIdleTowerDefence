@@ -6,7 +6,7 @@ public class Tower : TurretSpot {
         get => attackPower;
     }
 
-    protected int attackPower = 1;
+    [SerializeField] protected int attackPower = 1;
     [SerializeField] protected float range = 2;
     [SerializeField] protected float reloadTime = 2;
     [SerializeField] protected int value = 1;

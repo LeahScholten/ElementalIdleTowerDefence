@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,8 +29,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject earthTowerPrefab;
     [SerializeField] private int earthTowerPrice;
     [SerializeField] private GameObject turretSet;
-
     [SerializeField] private TMP_Text moneyText;
+    [SerializeField] private GameObject[] monsterPrefabs;
+    [SerializeField] private Vector2 spawnPosition;
+    [SerializeField] private float spawnDelay;
+    [SerializeField] private float gameOverFrameDurationSec = 0.05f;
 
     private TurretSpot selectedTurretSpot;
     private Tower selectedTower;
@@ -72,6 +76,7 @@ public class GameManager : MonoBehaviour
         SpawnTurretFields();
         mainCamera = Camera.main;
         DisplayMoney();
+        StartCoroutine(SpawnMonsters());
     }
 
     void StopHoveringOverTurret() {
@@ -141,8 +146,10 @@ public class GameManager : MonoBehaviour
 
             // Stop hovering over the previous turret, if any
             StopHoveringOverTurret();
+            
         }else if (selectedObject.TryGetComponent(out TurretSpot turretSpot)) {
             selectTurretSpot(turretSpot);
+            StopHoveringOverTower();
         }
     }
 
@@ -196,13 +203,16 @@ public class GameManager : MonoBehaviour
     }
 
     public void OnClick() {
+        Debug.Log(buildOption);
         switch (buildOption) {
             case BuildOption.Nothing:
                 break;
             case BuildOption.Sell:
                 if (selectedTower == null) {
+                    Debug.Log("No selected tower");
                     break;
                 }
+                Debug.Log(selectedTower.gameObject.name);
                 money += selectedTower.Sell();
                 selectedTower = null;
                 break;
@@ -239,5 +249,21 @@ public class GameManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private IEnumerator SpawnMonsters() {
+        while (true) {
+            while (Time.deltaTime < gameOverFrameDurationSec) {
+                GameObject monster = monsterPrefabs[Random.Range(0, monsterPrefabs.Length)];
+                Instantiate(monster, spawnPosition, monster.transform.rotation);
+                yield return new WaitForSeconds(spawnDelay);
+                spawnDelay *= 0.99f;
+            }
+
+            while (Time.deltaTime > gameOverFrameDurationSec) {
+                spawnDelay /= 0.99f;
+                yield return new WaitForSeconds(spawnDelay);
+            }
+        }
     }
 }

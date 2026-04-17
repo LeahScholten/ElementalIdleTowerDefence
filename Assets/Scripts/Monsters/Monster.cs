@@ -38,7 +38,7 @@ public class Monster : MonoBehaviour
         }
         health -= amount;
         healthBar.transform.localScale = new Vector3((float)health / maxHealth * 0.75f, 1);
-        healthBar.transform.Translate(new Vector3(-1f / maxHealth / 2, 0));
+        healthBar.transform.Translate(new Vector3((float)-amount / maxHealth / 2, 0));
         return true;
     }
 
