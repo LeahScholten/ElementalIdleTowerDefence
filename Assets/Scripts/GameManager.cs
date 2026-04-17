@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void DisplayMoney() {
-        moneyText.text = $"Money: {money}";
+        moneyText.text = money.ToString();
     }
 
     public void AddMoney(int amount) {
