@@ -150,12 +150,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   turretSpotPrefab: {fileID: 1254578417437971279, guid: f74310f40d7ebc515816e2337fb5468f, type: 3}
-  waterTowerPrefab: {fileID: 6760606400575961946, guid: 79ab7f358d28c8a31b017b50804dabfa, type: 3}
-  fireTowerPrefab: {fileID: 1481302632230534283, guid: 4bf36d64041e573fcbea550106c9da75, type: 3}
   airTowerPrefab: {fileID: 5868543198395834933, guid: 5855b5415648fc3f998c691a1b53f500, type: 3}
+  airTowerPrice: 1
+  waterTowerPrefab: {fileID: 6760606400575961946, guid: 79ab7f358d28c8a31b017b50804dabfa, type: 3}
+  waterTowerPrice: 2
+  fireTowerPrefab: {fileID: 1481302632230534283, guid: 4bf36d64041e573fcbea550106c9da75, type: 3}
+  fireTowerPrice: 4
   earthTowerPrefab: {fileID: 2522206112377725821, guid: e7d5ea4527eb7fa3c90478d7da671799, type: 3}
+  earthTowerPrice: 8
   turretSet: {fileID: 2134811425}
-  buildOption: 0
+  moneyText: {fileID: 1759237635}
 --- !u!4 &176313240
 Transform:
   m_ObjectHideFlags: 0
@@ -395,7 +399,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Fire (2)
+  m_text: Fire (4)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -808,7 +812,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -300, y: -150}
   m_SizeDelta: {x: 140, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &481668716
@@ -2330,15 +2334,15 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1273852887}
-  - {fileID: 967567740}
-  - {fileID: 476491140}
-  - {fileID: 2056934418}
-  - {fileID: 481668715}
-  - {fileID: 1469831199}
+  - {fileID: 1759237634}
   - {fileID: 1875738862}
+  - {fileID: 2056934418}
+  - {fileID: 1469831199}
+  - {fileID: 481668715}
   - {fileID: 642173208}
   - {fileID: 995286526}
-  - {fileID: 1759237634}
+  - {fileID: 967567740}
+  - {fileID: 476491140}
   m_Father: {fileID: 1068113285}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -2767,7 +2771,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -150}
+  m_AnchoredPosition: {x: -300, y: 0}
   m_SizeDelta: {x: 140, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1875738863
@@ -3037,7 +3041,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 140, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2056934419
@@ -3191,7 +3195,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Air (4)
+  m_text: Air (1)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3431,7 +3435,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Water (1)
+  m_text: Water (2)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

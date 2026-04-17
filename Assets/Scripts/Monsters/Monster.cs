@@ -7,6 +7,7 @@ public class Monster : MonoBehaviour
     GameObject[] trackPoints;
     private int pointIndex = 0;
     [SerializeField] protected float speed;
+    [SerializeField] protected int value;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,5 +30,6 @@ public class Monster : MonoBehaviour
 
     public virtual void GetAttacked(Tower tower) {
         Destroy(gameObject);
+        FindAnyObjectByType<GameManager>().AddMoney(value);
     }
 }

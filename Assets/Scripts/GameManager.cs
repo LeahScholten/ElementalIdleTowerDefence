@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -18,15 +19,22 @@ public class GameManager : MonoBehaviour
     public GameObject TurretSpotPrefab { get => turretSpotPrefab; }
     
     [SerializeField] private GameObject turretSpotPrefab;
-    [SerializeField] private GameObject waterTowerPrefab;
-    [SerializeField] private GameObject fireTowerPrefab;
     [SerializeField] private GameObject airTowerPrefab;
+    [SerializeField] private int airTowerPrice;
+    [SerializeField] private GameObject waterTowerPrefab;
+    [SerializeField] private int waterTowerPrice;
+    [SerializeField] private GameObject fireTowerPrefab;
+    [SerializeField] private int fireTowerPrice;
     [SerializeField] private GameObject earthTowerPrefab;
+    [SerializeField] private int earthTowerPrice;
     [SerializeField] private GameObject turretSet;
+
+    [SerializeField] private TMP_Text moneyText;
 
     private TurretSpot selectedTurretSpot;
     private Tower selectedTower;
     private Camera mainCamera;
+    private int money = 1;
 
     void SpawnTurretFields() {
         // Generate the top and bottom border turret spots
@@ -63,6 +71,7 @@ public class GameManager : MonoBehaviour
     void Start() {
         SpawnTurretFields();
         mainCamera = Camera.main;
+        DisplayMoney();
     }
 
     void StopHoveringOverTurret() {
@@ -177,8 +186,8 @@ public class GameManager : MonoBehaviour
         buildOption = BuildOption.Sell;
     }
 
-    void BuildTower(GameObject towerPrefab) {
-        if (selectedTurretSpot == null) {
+    void BuildTower(GameObject towerPrefab, int price) {
+        if (selectedTurretSpot == null || !PayMoney(price)) {
             return;
         }
         Instantiate(towerPrefab, selectedTurretSpot.transform.position, towerPrefab.transform.rotation, turretSet.transform);
@@ -194,22 +203,41 @@ public class GameManager : MonoBehaviour
                 if (selectedTower == null) {
                     break;
                 }
-                selectedTower.Sell();
+                money += selectedTower.Sell();
                 selectedTower = null;
-                Debug.Log("Sold tower");
                 break;
             case BuildOption.WaterTower:
-                BuildTower(waterTowerPrefab);
+                BuildTower(waterTowerPrefab, waterTowerPrice);
                 break;
             case BuildOption.FireTower:
-                BuildTower(fireTowerPrefab);
+                BuildTower(fireTowerPrefab, fireTowerPrice);
                 break;
             case BuildOption.AirTower:
-                BuildTower(airTowerPrefab);
+                BuildTower(airTowerPrefab, airTowerPrice);
                 break;
             case BuildOption.EarthTower:
-                BuildTower(earthTowerPrefab);
+                BuildTower(earthTowerPrefab, earthTowerPrice);
                 break;
         }
+    }
+
+    private void DisplayMoney() {
+        moneyText.text = $"Money: {money}";
+    }
+
+    public void AddMoney(int amount) {
+        if (amount > 0) {
+            money += amount;
+            DisplayMoney();
+        }
+    }
+    
+    private bool PayMoney(int amount) {
+        if (money >= amount) {
+            money -= amount;
+            DisplayMoney();
+            return true;
+        }
+        return false;
     }
 }

@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tower
   reloadTime: 3
-  value: 1
+  value: 4
   turretSpotPrefab: {fileID: 1254578417437971279, guid: f74310f40d7ebc515816e2337fb5468f, type: 3}
 --- !u!61 &5717677019285617472
 BoxCollider2D:

@@ -76,8 +76,9 @@ public class Tower : TurretSpot {
         }
     }
 
-    public void Sell() {
+    public int Sell() {
         Instantiate(turretSpotPrefab, transform.position, transform.rotation, transform.parent);
         Destroy(gameObject);
+        return value;
     }
 }
