@@ -1774,7 +1774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 824444429255719159, guid: 79e60a0f3ac7a35c182582407be756cf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 824444429255719159, guid: 79e60a0f3ac7a35c182582407be756cf, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2013,7 +2013,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 630275851812380455, guid: 3a8930ccea4824e1f80b932c537e74a3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 630275851812380455, guid: 3a8930ccea4824e1f80b932c537e74a3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2802,7 +2802,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -3818,7 +3818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7038405001349063237, guid: fa89174950ab773d292e53517fca13e3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7038405001349063237, guid: fa89174950ab773d292e53517fca13e3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4683,7 +4683,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6134097153676399634, guid: 35145fd8bf67a8c8194f19137aa09405, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6134097153676399634, guid: 35145fd8bf67a8c8194f19137aa09405, type: 3}
       propertyPath: m_LocalPosition.z

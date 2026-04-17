@@ -8,10 +8,14 @@ public class Monster : MonoBehaviour
     private int pointIndex = 0;
     [SerializeField] protected float speed;
     [SerializeField] protected int value;
+    [SerializeField] protected int maxHealth = 1;
+    [SerializeField] private GameObject healthBar;
+    private int health;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        health = maxHealth;
         trackPoints = GameObject.FindGameObjectsWithTag("Track");
         Array.Sort(trackPoints, (x, y) => x.name.CompareTo(y.name));
     }
@@ -28,8 +32,20 @@ public class Monster : MonoBehaviour
         }
     }
 
+    private bool LoseHealth(int amount) {
+        if (amount >= health) {
+            return false;
+        }
+        health -= amount;
+        healthBar.transform.localScale = new Vector3((float)health / maxHealth * 0.75f, 1);
+        healthBar.transform.Translate(new Vector3(-1f / maxHealth / 2, 0));
+        return true;
+    }
+
     public virtual void GetAttacked(Tower tower) {
-        Destroy(gameObject);
-        FindAnyObjectByType<GameManager>().AddMoney(value);
+        if (!LoseHealth(tower.AttackPower)) {
+            Destroy(gameObject);
+            FindAnyObjectByType<GameManager>().AddMoney(value);
+        }
     }
 }
