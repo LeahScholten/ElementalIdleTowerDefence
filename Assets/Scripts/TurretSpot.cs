@@ -2,16 +2,19 @@ using System;
 using UnityEngine;
 
 public class TurretSpot : MonoBehaviour {
-    SpriteRenderer spriteRenderer;
-    Color color;
+    protected SpriteRenderer spriteRenderer;
+    protected Color color;
 
     void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         color = spriteRenderer.color;
     }
 
-    public void HoverOver() {
-        spriteRenderer.color = Color.red;
+    public virtual void HoverOver(GameManager.BuildOption mode) {
+        if (mode == GameManager.BuildOption.Nothing || mode == GameManager.BuildOption.Sell) {
+            return;
+        }
+        spriteRenderer.color = Color.white;
     }
 
     public void EndHoverOver() {

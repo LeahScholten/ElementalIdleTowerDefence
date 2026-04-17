@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : MonoBehaviour {
+public class Tower : TurretSpot {
     protected float range = 2;
     [SerializeField] protected float reloadTime = 2;
     [SerializeField] protected int value = 1;
     [SerializeField] private GameObject turretSpotPrefab;
-    bool canShoot = true;
+    private bool canShoot = true;
+
+    void Awake() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        color =  spriteRenderer.color;
+    }
     
     Monster FindnearestMonster() {
         Monster[] monsters = FindObjectsByType<Monster>(FindObjectsSortMode.None);
@@ -59,6 +64,16 @@ public class Tower : MonoBehaviour {
     void Update() {
         Monster nearestMonster = FindnearestMonster();
         ShootAtMonster(nearestMonster);
+    }
+
+    public override void HoverOver(GameManager.BuildOption buildOption) {
+        if (buildOption == GameManager.BuildOption.Sell) {
+            spriteRenderer.color = Color.red;
+            Debug.Log("Selected to be sold");
+        }
+        else {
+            Debug.Log("Not in sell mode");
+        }
     }
 
     public void Sell() {

@@ -82,17 +82,37 @@ public class GameManager : MonoBehaviour
         StopHoveringOverTurret();
         
         // Hover over the selected turret
-        turret.HoverOver();
+        turret.HoverOver(buildOption);
         
         // Store the selected turret
         selectedTurretSpot = turret;
     }
 
     void SelectTower(Tower tower) {
+        if (selectedTower == tower) {
+            return;
+        }
+
+        if (selectedTower != null) {
+            selectedTower.EndHoverOver();
+        }
+
         selectedTower = tower;
+        tower.HoverOver(buildOption);
+    }
+
+    void StopHoveringOverTower() {
+        if (selectedTower != null) {
+            selectedTower.EndHoverOver();
+            selectedTower = null;
+        }
     }
 
     void HandleMouseOver() {
+        if (buildOption == BuildOption.Nothing) {
+            return;
+        }
+        
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         
         // Cast a ray from the mouse
@@ -101,18 +121,19 @@ public class GameManager : MonoBehaviour
         // Return if it didn't hit anything
         if (hit.collider == null) {
             StopHoveringOverTurret();
+            StopHoveringOverTower();
             return;
         }
         
         // Check whether the hit object was a turret
         GameObject selectedObject = hit.collider.gameObject;
-        if (selectedObject.TryGetComponent(out TurretSpot turretSpot)) {
-            selectTurretSpot(turretSpot);
-        }else if (selectedObject.TryGetComponent(out Tower tower)) {
+        if (selectedObject.TryGetComponent(out Tower tower)) {
             SelectTower(tower);
 
             // Stop hovering over the previous turret, if any
             StopHoveringOverTurret();
+        }else if (selectedObject.TryGetComponent(out TurretSpot turretSpot)) {
+            selectTurretSpot(turretSpot);
         }
     }
 
@@ -175,6 +196,7 @@ public class GameManager : MonoBehaviour
                 }
                 selectedTower.Sell();
                 selectedTower = null;
+                Debug.Log("Sold tower");
                 break;
             case BuildOption.WaterTower:
                 BuildTower(waterTowerPrefab);
