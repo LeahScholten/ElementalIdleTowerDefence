@@ -1,10 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : MonoBehaviour {
+public class Tower : TurretSpot {
     protected float range = 2;
     [SerializeField] protected float reloadTime = 2;
-    bool canShoot = true;
+    [SerializeField] protected int value = 1;
+    [SerializeField] private GameObject turretSpotPrefab;
+    private bool canShoot = true;
+
+    void Awake() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        color =  spriteRenderer.color;
+    }
     
     Monster FindnearestMonster() {
         Monster[] monsters = FindObjectsByType<Monster>(FindObjectsSortMode.None);
@@ -41,16 +48,13 @@ public class Tower : MonoBehaviour {
         }
         
         if (monster == null) {
-            Debug.Log("No monster found");
             return;
         }
         
         if ((monster.transform.position - transform.position).sqrMagnitude > range) {
-            Debug.Log($"{monster.name} out of range");
             return;
         }
         
-        Debug.Log(monster.name);
         monster.GetAttacked(this);
         canShoot = false;
         Invoke(nameof(Reload), reloadTime);
@@ -60,5 +64,21 @@ public class Tower : MonoBehaviour {
     void Update() {
         Monster nearestMonster = FindnearestMonster();
         ShootAtMonster(nearestMonster);
+    }
+
+    public override void HoverOver(GameManager.BuildOption buildOption) {
+        if (buildOption == GameManager.BuildOption.Sell) {
+            spriteRenderer.color = Color.red;
+            Debug.Log("Selected to be sold");
+        }
+        else {
+            Debug.Log("Not in sell mode");
+        }
+    }
+
+    public int Sell() {
+        Instantiate(turretSpotPrefab, transform.position, transform.rotation, transform.parent);
+        Destroy(gameObject);
+        return value;
     }
 }

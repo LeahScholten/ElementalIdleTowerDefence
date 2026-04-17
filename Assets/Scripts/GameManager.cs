@@ -1,13 +1,40 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+
 public class GameManager : MonoBehaviour
 {
+    public enum BuildOption {
+        Nothing,
+        WaterTower,
+        FireTower,
+        AirTower,
+        EarthTower,
+        Sell
+    }
+
+    private BuildOption buildOption;
+    public GameObject TurretSpotPrefab { get => turretSpotPrefab; }
+    
     [SerializeField] private GameObject turretSpotPrefab;
+    [SerializeField] private GameObject airTowerPrefab;
+    [SerializeField] private int airTowerPrice;
+    [SerializeField] private GameObject waterTowerPrefab;
+    [SerializeField] private int waterTowerPrice;
+    [SerializeField] private GameObject fireTowerPrefab;
+    [SerializeField] private int fireTowerPrice;
+    [SerializeField] private GameObject earthTowerPrefab;
+    [SerializeField] private int earthTowerPrice;
     [SerializeField] private GameObject turretSet;
-    private TurretSpot previousTurretSpot;
+
+    [SerializeField] private TMP_Text moneyText;
+
+    private TurretSpot selectedTurretSpot;
+    private Tower selectedTower;
     private Camera mainCamera;
+    private int money = 1;
 
     void SpawnTurretFields() {
         // Generate the top and bottom border turret spots
@@ -44,16 +71,57 @@ public class GameManager : MonoBehaviour
     void Start() {
         SpawnTurretFields();
         mainCamera = Camera.main;
+        DisplayMoney();
     }
 
     void StopHoveringOverTurret() {
-        if (previousTurretSpot != null) {
-            previousTurretSpot.EndHoverOver();
-            previousTurretSpot = null;
+        if (selectedTurretSpot != null) {
+            selectedTurretSpot.EndHoverOver();
+            selectedTurretSpot = null;
+        }
+    }
+
+    void selectTurretSpot(TurretSpot turret) {
+        // Return if the mouse is still over the same turret spot
+        if (selectedTurretSpot == turret) {
+            return;
+        }
+
+        // Stop hovering over the previous turret, if any
+        StopHoveringOverTurret();
+        
+        // Hover over the selected turret
+        turret.HoverOver(buildOption);
+        
+        // Store the selected turret
+        selectedTurretSpot = turret;
+    }
+
+    void SelectTower(Tower tower) {
+        if (selectedTower == tower) {
+            return;
+        }
+
+        if (selectedTower != null) {
+            selectedTower.EndHoverOver();
+        }
+
+        selectedTower = tower;
+        tower.HoverOver(buildOption);
+    }
+
+    void StopHoveringOverTower() {
+        if (selectedTower != null) {
+            selectedTower.EndHoverOver();
+            selectedTower = null;
         }
     }
 
     void HandleMouseOver() {
+        if (buildOption == BuildOption.Nothing) {
+            return;
+        }
+        
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         
         // Cast a ray from the mouse
@@ -62,30 +130,20 @@ public class GameManager : MonoBehaviour
         // Return if it didn't hit anything
         if (hit.collider == null) {
             StopHoveringOverTurret();
+            StopHoveringOverTower();
             return;
         }
         
         // Check whether the hit object was a turret
-        TurretSpot turret = hit.collider.gameObject.GetComponent<TurretSpot>();
+        GameObject selectedObject = hit.collider.gameObject;
+        if (selectedObject.TryGetComponent(out Tower tower)) {
+            SelectTower(tower);
 
-        // Return if the mouse is still over the same turret spot
-        if (previousTurretSpot == turret) {
-            return;
+            // Stop hovering over the previous turret, if any
+            StopHoveringOverTurret();
+        }else if (selectedObject.TryGetComponent(out TurretSpot turretSpot)) {
+            selectTurretSpot(turretSpot);
         }
-
-        // Stop hovering over the previous turret, if any
-        StopHoveringOverTurret();
-        
-        // Return if the mouse isn't hovering over a turret
-        if (turret == null) {
-            return;
-        }
-        
-        // Hover over the selected turret
-        turret.HoverOver();
-        
-        // Store the selected turret
-        previousTurretSpot = turret;
     }
 
     void Update() {
@@ -102,5 +160,84 @@ public class GameManager : MonoBehaviour
 
     public void ResetProgress() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void SelectWaterTower() {
+        buildOption = BuildOption.WaterTower;
+    }
+    
+    public void SelectFireTower() {
+        buildOption = BuildOption.FireTower;
+    }
+    
+    public void SelectAirTower() {
+        buildOption = BuildOption.AirTower;
+    }
+    
+    public void SelectEarthTower() {
+        buildOption = BuildOption.EarthTower;
+    }
+    
+    public void DeselectAll() {
+        buildOption = BuildOption.Nothing;
+    }
+
+    public void SelectSell() {
+        buildOption = BuildOption.Sell;
+    }
+
+    void BuildTower(GameObject towerPrefab, int price) {
+        if (selectedTurretSpot == null || !PayMoney(price)) {
+            return;
+        }
+        Instantiate(towerPrefab, selectedTurretSpot.transform.position, towerPrefab.transform.rotation, turretSet.transform);
+        Destroy(selectedTurretSpot.gameObject);
+        selectedTurretSpot = null;
+    }
+
+    public void OnClick() {
+        switch (buildOption) {
+            case BuildOption.Nothing:
+                break;
+            case BuildOption.Sell:
+                if (selectedTower == null) {
+                    break;
+                }
+                money += selectedTower.Sell();
+                selectedTower = null;
+                break;
+            case BuildOption.WaterTower:
+                BuildTower(waterTowerPrefab, waterTowerPrice);
+                break;
+            case BuildOption.FireTower:
+                BuildTower(fireTowerPrefab, fireTowerPrice);
+                break;
+            case BuildOption.AirTower:
+                BuildTower(airTowerPrefab, airTowerPrice);
+                break;
+            case BuildOption.EarthTower:
+                BuildTower(earthTowerPrefab, earthTowerPrice);
+                break;
+        }
+    }
+
+    private void DisplayMoney() {
+        moneyText.text = money.ToString();
+    }
+
+    public void AddMoney(int amount) {
+        if (amount > 0) {
+            money += amount;
+            DisplayMoney();
+        }
+    }
+    
+    private bool PayMoney(int amount) {
+        if (money >= amount) {
+            money -= amount;
+            DisplayMoney();
+            return true;
+        }
+        return false;
     }
 }
