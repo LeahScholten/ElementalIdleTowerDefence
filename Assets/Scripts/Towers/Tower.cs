@@ -2,10 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tower : TurretSpot {
-    protected float range = 2;
+    public int AttackPower {
+        get => attackPower;
+    }
+
+    [SerializeField] protected int attackPower = 1;
+    [SerializeField] protected float range = 2;
     [SerializeField] protected float reloadTime = 2;
     [SerializeField] protected int value = 1;
     [SerializeField] private GameObject turretSpotPrefab;
+
     private bool canShoot = true;
 
     void Awake() {
