@@ -214,6 +214,7 @@ public class GameManager : MonoBehaviour
                 }
                 Debug.Log(selectedTower.gameObject.name);
                 money += selectedTower.Sell();
+                DisplayMoney();
                 selectedTower = null;
                 break;
             case BuildOption.WaterTower:
